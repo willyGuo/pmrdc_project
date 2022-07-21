@@ -1,0 +1,17 @@
+/* clss專用(可多個)，會把叫做class是info的改成這個樣子 */
+.info {
+    color : rgb(29, 167, 75);
+    font-size: 1.5em;
+}
+/* #字號代表是id(唯一值)，會把叫做sp1的改成 */
+#sp1 {
+    color : red;
+    font-size: 1.5em;
+}
+
+.bd-example{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+

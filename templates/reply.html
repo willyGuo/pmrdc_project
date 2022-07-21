@@ -1,0 +1,219 @@
+
+{% extends 'base.html' %}
+{% block title %}PM申請工作單{% endblock %}
+{% block content %}
+<div class = 'info'><br></div>
+<div class ="row"> 
+    {% comment %} 左邊留白1 {% endcomment %}
+    <div class="col-2"></div>
+    
+    {% comment %} 左半邊表單 {% endcomment %}
+    <div class="col-3">
+        <form action="." method="POST" name="form1" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請人</label>
+                    <input type="text" class="form-control" value={{name}} id="cName" name="cName" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請單號</label>
+                    <input type="text" class="form-control" value={{CNumber_time}} id="cNumber" name="cNumber" placeholder="AM202205251259" readonly >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1" >客戶名稱</label>
+                    <label for="exampleFormControlInput1" id="cCusetername_lbl"></label>
+                    <input type="text" class="form-control" id="cCusetername" name ="cCusetername" placeholder="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案名稱</label>
+                    <label for="exampleFormControlInput1" id="cProjectname_lbl"></label>
+                    <input type="text" class="form-control" id="cProjectname" name="cProjectname" placeholder="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案代碼</label>
+                    <label for="exampleFormControlInput1" id="cProjectcode_lbl"></label>
+                    <input type="text" class="form-control" id="cProjectcode" name="cProjectcode" placeholder="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案開發地點</label>
+                    <label for="exampleFormControlInput1" id="cLocation_lbl"></label>
+                    <input type="text" class="form-control" id="cLocation" name="cLocation"placeholder="台北、蘇州、巴淡...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">工作內容</label>
+                    <label for="exampleFormControlInput1" id="cContent_lbl"></label>
+                    <input type="text" class="form-control" id="cContent" name="cContent" placeholder="設計、測試、2nd source驗證...">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="bday">工作需求區間</label>
+                    <label for="exampleFormControlInput1" id="bday_lbl"></label></br>
+                    <input type="date" id="cdatestart" name="cdatestart" > ~ <input type="date" id="cdateend" name="cdateend">
+                  </div>
+            </div>
+
+
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">工作所需Function</label>
+            <select class="form-control" id="cFunction" name="cFunction">
+              <option>ME</option>
+              <option>Thermal</option>
+              <option>PKG</option>
+              <option>Optical</option>
+              <option>CAE模流</option>
+              <option>CAE結構</option>
+              <option>Acoustic</option>
+            </select>
+          </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">開發類型</label>
+            <select class="form-control" id="cType" name="cType">
+              <option>NB</option>
+              <option>Switch</option>
+              <option>IPhone</option>
+              <option>STB</option>
+              <option>電子菸</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">合作類型</label>
+            <select class="form-control" id="cCotpye" name="cCotpye">
+              <option>ODM</option>
+              <option>OEM</option>
+              <option>JDM</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">目前Stage</label>
+            <select class="form-control" id="cStage" name="cStage">
+              <option>RFQ</option>
+              <option>ID Design</option>
+              <option>ME Design</option>
+              <option>SR</option>
+              <option>ER</option>
+              <option>PR</option>
+            </select>
+          </div>
+          <div class="form-group">
+
+                <label for="exampleFormControlInput1">特殊需求</label>
+                <input type="text" class="form-control" id="cSpecial" name="cSpecial" placeholder="語言能力、相關經驗...">
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">過去共用專案</label>
+                <input type="text" class="form-control" id="cLastproject" name="cLastproject" placeholder="">
+            </div> 
+        </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">備註</label>
+            <textarea class="form-control" id="cNoted" name="cNoted" rows="3"></textarea>
+          </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">檔案上傳<span style="color:red">{{error}}</span></label>
+                <label for="exampleFormControlInput1" id="myfile_lb"></label></br>
+                <input class="form-control" type="file" name = "myfile_n" id="myfil_i">
+            </div>    
+          <div class="col-3"></div>
+    <div class="col-2"></div>
+
+</div>
+<div class="col-2"></div>
+<div class="col-5"></div>
+
+
+<div class="col-2"><button type="button" onclick="correct_submit()"class="btn btn-primary btn-lg">送出</button></div>
+
+</form>
+
+{% csrf_token %}
+<script type="text/javascript">
+	function correct_submit() {
+        var v1=document.getElementById("cCusetername").value;
+        var v2=document.getElementById("cProjectname").value;
+        var v3=document.getElementById("cProjectcode").value;
+        var v4=document.getElementById("cLocation").value;
+        var v5=document.getElementById("cContent").value;
+        var v6=document.getElementById("cdatestart").value;
+        var v7=document.getElementById("cdateend").value;
+        if (v1 == ""){
+            var label = document.getElementById("cCusetername_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v2 == ""){
+            var label = document.getElementById("cProjectname_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v3 == ""){
+            var label = document.getElementById("cProjectcode_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v4 == ""){
+            var label = document.getElementById("cLocation_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v5 == ""){
+            var label = document.getElementById("cContent_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v6 == ""){
+            var label = document.getElementById("bday_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+        if (v7 == ""){
+            var label = document.getElementById("bday_lbl");
+            label.innerText="(必填)";
+            label.style.color= "red";
+            
+        }
+
+        if (v1 !="" && v2 !="" && v3 !="" && v4 !="" && v5 !=""&& v6 !=""&& v7 !=""){
+		var msg = "表單資訊是否正確，即將送出";
+		if (confirm(msg) == true) {
+            document.form1.action="/testurl/";
+            document.form1.submit();
+		} 
+		else {  
+		}
+    }
+	} 
+</script>
+
+{% endblock %}
+    

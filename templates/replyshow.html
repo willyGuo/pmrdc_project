@@ -1,0 +1,133 @@
+
+{% extends 'base.html' %}
+{% block title %}PM申請工作單{% endblock %}
+{% block content %}
+<div class = 'info'><br></div>
+<div class ="row"> 
+    {% comment %} 左邊留白1 {% endcomment %}
+    <div class="col-2"></div>
+
+    {% comment %} 左半邊表單 {% endcomment %}
+    <div class="col-3">
+        <form action="." method="GET" name="form1">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請人</label>
+                    <input type="text" class="form-control" value={{unit.cName}} id="cName" name="cName" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">申請單號</label>
+                    <input type="text" class="form-control" value={{unit.cNumber}} id="cNumber" name="cNumber" placeholder="AM202205251259" readonly >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">客戶名稱</label>
+                    <input type="text" class="form-control" value={{unit.cCusetername}} id="cCusetername" name ="cCusetername" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案名稱</label>
+                    <input type="text" class="form-control" value={{unit.cProjectname}} id="cProjectname" name="cProjectname" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案代碼</label>
+                    <input type="text" class="form-control" value={{unit.cProjectcode}} id="cProjectcode" name="cProjectcode" placeholder="" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">專案開發地點</label>
+                    <input type="text" class="form-control" value={{unit.cLocation}} id="cLocation" name="cLocation"placeholder="台北、蘇州、巴淡..." readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">工作內容</label>
+                    <input type="text" class="form-control" value={{unit.cContent}} id="cContent" name="cContent" placeholder="設計、測試、2nd source驗證..." readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-10">
+                    <label for="exampleFormControlInput1">過去共用專案</label>
+                    <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="1">{{unit.cLastproject}}</textarea >
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-10">
+                檔案下載 : <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a></li>
+                </div>
+            </div>
+
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">工作需求區間</label>
+            <input type="text" class="form-control" value={{unit.cdatestart}} id="cFunction" name="cFunction" placeholder="" readonly>
+            ~
+            <input type="text" class="form-control" value={{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly>
+          </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">工作所需Function</label>
+            <input type="text" class="form-control" value={{unit.cFunction}} id="cFunction" name="cFunction" placeholder="" readonly>
+          </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">開發類型</label>
+            <input type="text" class="form-control" value={{unit.cType}} id="cType" name="cType" placeholder="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">合作類型</label>
+            <input type="text" class="form-control" value={{unit.cCotpye}} id="cCotpye" name="cCotpye" placeholder="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">目前Stage</label>
+            <input type="text" class="form-control" value={{unit.cStage}} id="cStage" name="cStage" placeholder="" readonly>
+          </div>
+          <div class="form-group">
+
+                <label for="exampleFormControlInput1">特殊需求</label>
+                <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="1">{{unit.cSpecial}}</textarea >
+
+        </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">備註</label>
+            <textarea readonly class="form-control" id="cNoted" name="cNoted" rows="3">{{unit.cNoted}}</textarea >
+          </div>
+    <div class="col-2"></div>
+
+</div>
+<div class="col-2"></div>
+<div class="col-2"></div>
+<div class="mb-3">
+
+    <!--<a href="../media/" + {{unit.uploadedFile}} >{{unit.title}}</a>
+    <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>-->
+    
+  </div>
+  <div class="col-2"></div>
+</form>
+<div class="col-2">
+    <button class="btn btn-primary btn-lg" onclick="location.href='/index/'">回首頁
+    </button>
+</div>
+
+
+</div>
+
+{% endblock %}
+    

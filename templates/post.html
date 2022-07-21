@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset ='utf-8'>
+        <title>表單傳送範例</title>
+    </head>
+<body>
+    <form action="/post/" method="POST" name="form1">
+        {%csrf_token%}
+        <div>請輸入姓名:<input type="text" name="username" />
+            <input type="submit" value="送出資料" />
+        </dive>
+        <div>接受到的資料 :{{mess}}
+        </dive>
+    </form>
+</body>
+</html>
