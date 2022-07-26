@@ -4,8 +4,7 @@
 {% block content %}
     <h2>系統首頁</h2>
     {% if request.user.is_authenticated %}
-    	歡迎光臨:{{name}}
-        <p><a href="/login/">登出</a></p>
+    	歡迎光臨</br>
     {% else %}
         <p>您尚未登入喔~</p>
         <a href="/login/">登入</a>

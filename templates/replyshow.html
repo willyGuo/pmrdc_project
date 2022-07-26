@@ -2,6 +2,7 @@
 {% extends 'base.html' %}
 {% block title %}PM申請工作單{% endblock %}
 {% block content %}
+<form action="." method="POST" name="form1">
 <div class = 'info'><br></div>
 <div class ="row"> 
     {% comment %} 左邊留白1 {% endcomment %}
@@ -9,7 +10,7 @@
 
     {% comment %} 左半邊表單 {% endcomment %}
     <div class="col-3">
-        <form action="." method="GET" name="form1">
+        
             {% csrf_token %}
             <div class="form-group">
                 <div class="col-10">
@@ -68,7 +69,11 @@
             </div>
             <div class="form-group">
                 <div class="col-10">
-                檔案下載 : <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a></li>
+                檔案下載 : {% if unit.uploadedFile.url is not null %}
+                            <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a></li>
+                            {% else %}
+                            無上傳檔案
+                            {% endif %}
                 </div>
             </div>
 
@@ -76,10 +81,10 @@
     <div class="col-5">
         <div class="form-group">
             <label for="exampleFormControlSelect1">工作需求區間</label>
-            <input type="text" class="form-control" value={{unit.cdatestart}} id="cFunction" name="cFunction" placeholder="" readonly>
-            ~
-            <input type="text" class="form-control" value={{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly>
-          </div>
+            
+                <input type="text" class="form-control col-12" value={{unit.cdatestart}}~{{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly>
+                {% comment %} <input type="text" class="form-control col-4" value={{unit.cdateend}} id="cFunction" name="cFunction" placeholder="" readonly> {% endcomment %}
+        </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">工作所需Function</label>
             <input type="text" class="form-control" value={{unit.cFunction}} id="cFunction" name="cFunction" placeholder="" readonly>
@@ -120,12 +125,17 @@
     
   </div>
   <div class="col-2"></div>
-</form>
+  {% comment %} action="/replyupdate/{{unit.cNumber}}/load" {% endcomment %}
 <div class="col-2">
-    <button class="btn btn-primary btn-lg" onclick="location.href='/index/'">回首頁
+    <button class="btn btn-outline-primary" type="button" onclick="location.href='/replyupdate/{{unit.cNumber}}/load'">修改
     </button>
 </div>
-
+</form>
+<div class="col-2">
+    <button class="btn btn-primary" type="button" onclick="location.href=/index/">回首頁
+    </button>
+</div>
+</div>
 
 </div>
 

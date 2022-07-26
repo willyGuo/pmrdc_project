@@ -1,0 +1,321 @@
+
+  <div class="container">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Basic Information</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <div class="col-md-6">
+                <label class="control-label">Project&nbsp;code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Project code"
+                  ng-model="ctrl.pageData.CustomerName"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="control-label">客戶名稱</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="客戶名稱"
+                  ng-model="ctrl.pageData.SupportBU"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6">
+                <label class="control-label">專案名稱</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="專案名稱"
+                  ng-model="ctrl.pageData.ProjectName"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="control-label">專案類型</label>
+                <select
+                  class="form-control"
+                  data-ng-model="ctrl.selectedProjectType"
+                  data-ng-options="option.CodeDesc for option in ctrl.pageData.ProjectTypeList track by option.Code"
+                  required
+                >
+                  <option value="">-- 請選擇 --</option>
+
+                  <tr>
+                    {% for clereply_db in clereply_dbs%}
+                    <option value="{{clereply_db.producttype}}">
+                      {{clereply_db.producttype}}
+                    </option>
+                    {% endfor %}
+                  </tr>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">
+                <label class="control-label">產值計分產品線</label>
+                <select
+                  class="form-control"
+                  ng-model="ctrl.selectedOutPutScoreProductType"
+                  ng-options="option.CodeDesc for option in ctrl.pageData.OutputScoreProductTypeList track by option.Code"
+                  required
+                >
+                  <option value="">-- 請選擇 --</option>
+                  {% for clereply_db in clereply_dbs%}
+                  <tr>
+                    <td>{{student.id}}</td>
+                    <option value="{{clereply_db.productscoreline}}">
+                      {{clereply_db.productscoreline}}
+                    </option>
+                  </tr>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6">
+                <label class="control-label">人力投入百分比</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  class="form-control"
+                  placeholder="人力投入百分比"
+                  ng-model="ctrl.pageData.ResponsiblePercent"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="control-label">支援RD</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="帳號｜工號｜分機"
+                  ng-model="ctrl.pageData.SupportBU"
+                  required
+                />
+              </div>
+            </div>
+            <div style="clear: both"></div>
+          </div>
+        </div>
+        {% comment %}模具數{% endcomment %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">模具數</div>
+          <div class="panel-body">
+            <table class="table table-hover table-bordered">
+              <thead></thead>
+              <tbody>
+                <tr>
+                  <td>外觀大件件數(需開模具或CNC)</td>
+                  <td>凡外觀件最大投影面積大/等於6300mm^2,皆屬此類</td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumA"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>外觀中件件數(需開模具或CNC)</td>
+                  <td>
+                    凡外觀件最大投影面積大於3000mm^2但小於6300mm^2,皆屬此類(2件外觀中件=1件外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumB"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>外觀小件件數(需開模具或CNC)</td>
+                  <td>
+                    凡外觀件最大投影面積小於3000mm^2,皆屬此類(5件外觀小件=1件外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumC"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>內構非金屬大件件數(需開模具或CNC)</td>
+                  <td>
+                    凡內構件最大投影面積大/等於6300mm^2,皆屬此類(3個內構非金屬大件=1個外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumD"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>內構金屬大件件數(需開模具或CNC)</td>
+                  <td>
+                    凡內構件最大投影面積大/等於6300mm^2,皆屬此類(4個內構金屬大件=1個外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumE"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>內構非金屬小件件數(需開模具或CNC)</td>
+                  <td>
+                    凡內構非金屬件最大投影面積小於6300mm^2,皆屬此類(7個內構非金屬小件=1個外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumF"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>內構金屬小件件數(需開模具或CNC)</td>
+                  <td>
+                    凡內構金屬件最大投影面積小於6300mm^2,皆屬此類(10個內構金屬沖壓件=1個外觀大件)
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumG"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>組數</td>
+                  <td>模擬次數或是量測實驗組數</td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value="0"
+                      class="form-control"
+                      ng-model="ctrl.pageData.MoldDtil.NumA"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="form-group"></div>
+          </div>
+        </div>
+        {% comment %} 表單上傳資訊 {% endcomment %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">表單</div>
+          <div class="panel-body">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th style="width: 25%">確認項目</th>
+                  <th style="width: 35%">工程師檢查結果說明</th>
+                  <th style="width: 30%">工程師判定(無檔案則無需上傳)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  ng-repeat="item in ctrl.pageData.DetailList track by $index"
+                >
+                  <td ng-bind="::$index + 1">1</td>
+                  <td class="pre-line" ng-bind="::item.ConfirmContent">
+                    Checklist上傳
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      ng-model="item.EgrComment"
+                    />
+                  </td>
+                  <td>
+                    <div class="btn-group input-group">
+                      <input
+                        class="form-control"
+                        type="file"
+                        name="myfile_n"
+                        id="myfil_i"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr
+                  ng-repeat="item in ctrl.pageData.DetailList track by $index"
+                >
+                  <td ng-bind="::$index + 1">2</td>
+                  <td class="pre-line" ng-bind="::item.ConfirmContent">
+                    報告上傳
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      ng-model="item.EgrComment"
+                    />
+                  </td>
+                  <td>
+                    <div class="btn-group input-group">
+                      <input
+                        class="form-control"
+                        type="file"
+                        name="myfile_n"
+                        id="myfil_i"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          {% comment %} 按鈕 {% endcomment %}
+        </div>
+        <div style="text-align: center; vertical-align: text-top">
+          <button
+            type="button"
+            onclick="correct_submit()"
+            class="btn btn-primary btn-lg"
+          >
+            送出
+          </button>
+        </div>
+        <div>&nbsp;</div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+</div>

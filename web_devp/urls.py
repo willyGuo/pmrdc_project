@@ -39,10 +39,13 @@ urlpatterns = [
     path('indextest/',views.indextest),
     path('reply/',views.reply,name='my-view'),
     path('testurl/',views.reply_submit),
+    path('will/',views.will),
+    path('sign/',views.sign),
+    path('inquire/',views.inquire),
     path('edit/<int:id>/', views.edit),
     path('replyshow/<int:id>/<str:mode>',views.replyshow),
+    path('replyupdate/<int:id>/<str:mode>',views.replyUpdate),
     path('edit/<int:id>/<str:mode>', views.edit),
-
     path('edit2/<int:id>/<str:mode>', views.edit2),
     #path('postform/', postform),
     #path('postreq/', postrequisitionform),
@@ -50,6 +53,9 @@ urlpatterns = [
     path('vote/', views.vote),
     path('login/', views.login),
     path('logout/', views.logout),
+    #CLE系統
+    path('clereply/', views.clereply),
+    path('clesign/', views.clesign)
 
 
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block title %}PM申請工作單{% endblock %}
 {% block content %}
-<form action="." method="POST" name="form1" enctype="multipart/form-data">
+<form  method="POST" name="form1" enctype="multipart/form-data">
 <div class = 'info'><br></div>
 <div class ="row"> 
     {% comment %} 左邊留白1 {% endcomment %}
@@ -10,19 +10,18 @@
     
     {% comment %} 左半邊表單 {% endcomment %}
     <div class="col-3">
-        
             {% csrf_token %}
             <div class="form-group">
                 <div class="col-10">
                     <label for="exampleFormControlInput1">申請人</label>
-                    <input type="text" class="form-control"  id="cName" name="cName" placeholder="" readonly value={{cName}}>
+                    <input type="text" class="form-control"  id="cName" name="cName" placeholder="" readonly value={{unit.cName}}>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-10">
                     <label for="exampleFormControlInput1">申請單號</label>
-                    <input type="text" class="form-control"  id="cNumber" name="cNumber" placeholder="AM202205251259" readonly value={{CNumber_time}}{{cNumber}}>
+                    <input type="text" class="form-control"  id="cNumber" name="cNumber" placeholder="AM202205251259" readonly value={{unit.cNumber}}>
                 </div>
             </div>
 
@@ -30,7 +29,7 @@
                 <div class="col-10">
                     <label for="exampleFormControlInput1" >客戶名稱</label>
                     <label for="exampleFormControlInput1" id="cCusetername_lbl"></label>
-                    <input type="text" class="form-control" id="cCusetername"  name ="cCusetername" placeholder="" value={{cCusetername}}>
+                    <input type="text" class="form-control" id="cCusetername"  name ="cCusetername" placeholder="" value={{unit.cCusetername}}>
                 </div>
             </div>
 
@@ -38,7 +37,7 @@
                 <div class="col-10">
                     <label for="exampleFormControlInput1">專案名稱</label>
                     <label for="exampleFormControlInput1" id="cProjectname_lbl"></label>
-                    <input type="text" class="form-control" id="cProjectname" name="cProjectname" placeholder="" value={{cProjectname}}>
+                    <input type="text" class="form-control" id="cProjectname" name="cProjectname" placeholder="" value={{unit.cProjectname}}>
                 </div>
             </div>
 
@@ -46,7 +45,7 @@
                 <div class="col-10">
                     <label for="exampleFormControlInput1">專案代碼</label>
                     <label for="exampleFormControlInput1" id="cProjectcode_lbl"></label>
-                    <input type="text" class="form-control" id="cProjectcode" name="cProjectcode" placeholder="" value={{cProjectcode}}>
+                    <input type="text" class="form-control" id="cProjectcode" name="cProjectcode" placeholder="" value={{unit.cProjectcode}}>
                 </div>
             </div>
 
@@ -54,7 +53,7 @@
                 <div class="col-10">
                     <label for="exampleFormControlInput1">專案開發地點</label>
                     <label for="exampleFormControlInput1" id="cLocation_lbl"></label>
-                    <input type="text" class="form-control" id="cLocation" name="cLocation"placeholder="台北、蘇州、巴淡..." value={{cLocation}}>
+                    <input type="text" class="form-control" id="cLocation" name="cLocation"placeholder="台北、蘇州、巴淡..." value={{unit.cLocation}}>
                 </div>
             </div>
 
@@ -62,14 +61,14 @@
                 <div class="col-10">
                     <label for="exampleFormControlInput1">工作內容</label>
                     <label for="exampleFormControlInput1" id="cContent_lbl"></label>
-                    <input type="text" class="form-control" id="cContent" name="cContent" placeholder="設計、測試、2nd source驗證..." value={{cContent}}>
+                    <input type="text" class="form-control" id="cContent" name="cContent" placeholder="設計、測試、2nd source驗證..." value={{unit.cContent}}>
                 </div>
             </div>
             <div class="form-group">
                 <div>
                     <label for="bday">工作需求區間</label>
                     <label for="exampleFormControlInput1" id="bday_lbl"></label></br>
-                    <input type="date" id="cdatestart" name="cdatestart" value={{cdatestart}}> ~ <input type="date" id="cdateend" name="cdateend" value={{cdateend}}>
+                    <input type="date" id="cdatestart" name="cdatestart" value="{{unit.cdatestart|date:"Y-m-d"}}"> ~ <input type="date" id="cdateend" name="cdateend"  value="{{unit.cdateend|date:"Y-m-d"}}">
                   </div>
             </div>
 
@@ -79,63 +78,70 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1">工作所需Function</label>
             <select class="form-control" id="cFunction" name="cFunction">
-              <option>ME</option>
-              <option>Thermal</option>
-              <option>PKG</option>
-              <option>Optical</option>
-              <option>CAE模流</option>
-              <option>CAE結構</option>
-              <option>Acoustic</option>
+              <option {% if unit.cFunction == "ME" %}selected = "selected"{% endif %}>ME</option>
+              <option {% if unit.cFunction == "Thermal" %}selected = "selected"{% endif %}>Thermal</option>
+              <option {% if unit.cFunction == "PKG" %}selected = "selected"{% endif %}>PKG</option>
+              <option {% if unit.cFunction == "Optical" %}selected = "selected"{% endif %}>Optical</option>
+              <option {% if unit.cFunction == "CAE模流" %}selected = "selected"{% endif %}>CAE模流</option>
+              <option {% if unit.cFunction == "CAE結構" %}selected = "selected"{% endif %}>CAE結構</option>
+              <option {% if unit.cFunction == "Acoustic" %}selected = "selected"{% endif %}>Acoustic</option>
             </select>
           </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">開發類型</label>
             <select class="form-control" id="cType" name="cType">
-              <option>NB</option>
-              <option>Switch</option>
-              <option>IPhone</option>
-              <option>STB</option>
-              <option>電子菸</option>
+              <option {% if unit.cType == "NB" %}selected = "selected"{% endif %}>NB</option>
+              <option {% if unit.cType == "Switch" %}selected = "selected"{% endif %}>Switch</option>
+              <option {% if unit.cType == "IPhone" %}selected = "selected"{% endif %}>IPhone</option>
+              <option {% if unit.cType == "STB" %}selected = "selected"{% endif %}>STB</option>
+              <option {% if unit.cType == "電子菸" %}selected = "selected"{% endif %}>電子菸</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="exampleFormControlSelect1">合作類型</label>
             <select class="form-control" id="cCotpye" name="cCotpye">
-              <option>ODM</option>
-              <option>OEM</option>
-              <option>JDM</option>
+              <option {% if unit.cCotpye == "ODM" %}selected = "selected"{% endif %}>ODM</option>
+              <option {% if unit.cCotpye == "OEM" %}selected = "selected"{% endif %}>OEM</option>
+              <option {% if unit.cCotpye == "JDM" %}selected = "selected"{% endif %}>JDM</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="exampleFormControlSelect1">目前Stage</label>
             <select class="form-control" id="cStage" name="cStage">
-              <option>RFQ</option>
-              <option>ID Design</option>
-              <option>ME Design</option>
-              <option>SR</option>
-              <option>ER</option>
-              <option>PR</option>
+              <option {% if unit.cStage == "RFQ" %}selected = "selected"{% endif %}>RFQ</option>
+              <option {% if unit.cStage == "ID Design" %}selected = "selected"{% endif %}>ID&nbsp;Design</option>
+              <option {% if unit.cStage == "ME Design" %}selected = "selected"{% endif %}>ME&nbsp;Design</option>
+              <option {% if unit.cStage == "SR" %}selected = "selected"{% endif %}>SR</option>
+              <option {% if unit.cStage == "ER" %}selected = "selected"{% endif %}>ER</option>
+              <option {% if unit.cStage == "PR" %}selected = "selected"{% endif %}>PR</option>
             </select>
           </div>
           <div class="form-group">
 
                 <label for="exampleFormControlInput1">特殊需求</label>
-                <input type="text" class="form-control" id="cSpecial" name="cSpecial" placeholder="語言能力、相關經驗...">
+                <input type="text" class="form-control" id="cSpecial" name="cSpecial" placeholder="語言能力、相關經驗..." value={{unit.cSpecial}}>
             <div class="form-group">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlInput1">過去共用專案</label>
-                <input type="text" class="form-control" id="cLastproject" name="cLastproject" placeholder="">
+                <input type="text" class="form-control" id="cLastproject" name="cLastproject" placeholder="" value={{unit.cLastproject}}>
             </div> 
         </div>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">備註</label>
-            <textarea class="form-control" id="cNoted" name="cNoted" rows="3"></textarea>
+            <textarea class="form-control" id="cNoted" name="cNoted" rows="3" >{{unit.cNoted}}</textarea>
           </div>
             <div class="mb-3">
-                <label for="formFile" class="form-label">檔案上傳<span style="color:red">{{error}}</span></label>
+                <label for="formFile" class="form-label">檔案上傳
+                    <span style="color:red">{{error}}</span>
+                    {% if unit.uploadedFile.url is not null %}
+                        <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a>
+                    {% else %}
+                            無上傳檔案
+                    {% endif %}
+                </label>
                 <label for="exampleFormControlInput1" id="myfile_lb"></label></br>
                 <input class="form-control" type="file" name = "myfile_n" id="myfil_i">
             </div>    
@@ -162,6 +168,7 @@
         document.getElementById("bday_lbl").innerText="";
         document.getElementById("myfile_lb").innerText="";
         
+        var v0=document.getElementById("cNumber").value;
         var v1=document.getElementById("cCusetername").value;
         var v2=document.getElementById("cProjectname").value;
         var v3=document.getElementById("cProjectcode").value;
@@ -217,7 +224,7 @@
         if (v1 !="" && v2 !="" && v3 !="" && v4 !="" && v5 !=""&& v6 !=""&& v7 !=""){
 		var msg = "表單資訊是否正確，即將送出";
 		if (confirm(msg) == true) {
-            document.form1.action="/testurl/";
+            document.form1.action= "./save";
             document.form1.submit();
         }
 		else {  

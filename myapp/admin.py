@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import student, requisition
+from myapp.models import student, requisition,clereply_db
 # Register your models here.
 
 class studentAdmin(admin.ModelAdmin):
@@ -15,6 +15,11 @@ class requisitionAdmin(admin.ModelAdmin):
     list_filter =('cName', )
     search_fields = ('cName',)
     ordering =('id',)
-
+class clereply_dbAdmin(admin.ModelAdmin):
+    list_display = ('product', 'checklist', 'producttype', 'productscoreline')
+    list_filter =('product', 'checklist')
+    search_fields = ('product',)
+    ordering =('id',)
 admin.site.register(student,studentAdmin)
 admin.site.register(requisition,requisitionAdmin)
+admin.site.register(clereply_db,clereply_dbAdmin)

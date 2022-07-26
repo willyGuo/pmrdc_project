@@ -1,6 +1,7 @@
 from curses import noecho
 from email import message
 import imp
+from itertools import product
 import re
 from turtle import pos
 from urllib import response
@@ -10,7 +11,7 @@ from django.contrib.auth import authenticate
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib import auth
-from myapp.models import student, requisition
+from myapp.models import student, requisition, clereply_db
 from myapp.forms import PostForm, Requisition
 import time
 from . import models
@@ -63,8 +64,10 @@ def listall(request):
     now = datetime.now()
     try:
         students = student.objects.all().order_by('id')
+        
     except:
         errormessage = " (讀取錯誤!) "
+    print(students)
     return render(request, "listall.html", locals())
 
 def post(request):
@@ -121,13 +124,15 @@ def indextest(request):
     postform = PostForm()  #建立PostForm物件
     return render(request, "indextest.html", locals())
 def reply(request):
+    name=request.user.username
     now = datetime.now()
     CNumber_time = cNumber_time()
     if request.user.is_authenticated:
-        name=request.user.username
+        cName=request.user.username
     return render(request, "reply.html", locals())
 
 def reply_submit(request):
+    name=request.user.username
     cName = request.POST['cName']
     cNumber = request.POST['cNumber']
     cProjectname = request.POST['cProjectname']
@@ -144,22 +149,33 @@ def reply_submit(request):
     cdatestart = request.POST['cdatestart']
     cdateend = request.POST['cdateend']
     cFunction = request.POST['cFunction']
-    #upload file
-    #print(request.FILES.get('myfile_n'))
-    title = request.FILES.get('myfile_n')
-    uploadedFile = request.FILES['myfile_n']
-    if uploadedFile.size < 5242880:
-        unit = requisition.objects.create(title=title, uploadedFile=uploadedFile,cSpecial = cSpecial,cName=cName, cNumber=cNumber,cProjectname = cProjectname, cCusetername = cCusetername, \
-            cProjectcode = cProjectcode, cLocation = cLocation,\
-            cContent = cContent, cLastproject = cLastproject,cType=cType, cCotpye=cCotpye,\
-                cStage=cStage, cNoted=cNoted, cdatestart = cdatestart, cdateend=cdateend,cFunction=cFunction)
+    #先判斷，request.post裡面有沒有myfile_n
+    if request.POST.get('myfile_n',"no key") == "no key":
+    #如果有上傳檔案就拿資料，拿完資料後比較檔案大小
+        #if not request.FILES['myfile_n']:
+        uploadedFile = request.FILES['myfile_n']
+        title = request.FILES.get('myfile_n')
+        if uploadedFile.size < 5242880:
+            unit = requisition.objects.create(title=title, uploadedFile=uploadedFile,cSpecial = cSpecial,cName=cName, cNumber=cNumber,cProjectname = cProjectname, cCusetername = cCusetername, \
+                cProjectcode = cProjectcode, cLocation = cLocation,\
+                cContent = cContent, cLastproject = cLastproject,cType=cType, cCotpye=cCotpye,\
+                    cStage=cStage, cNoted=cNoted, cdatestart = cdatestart, cdateend=cdateend,cFunction=cFunction)
+            unit.save()
+            message = "已儲存..."
+            page= "../replyshow/" + str(cNumber) + "/show"
+            return redirect(page)
+        else:
+            error = "(檔案大小超過5mB，請壓縮!)"
+            return render(request, "reply.html", locals())
+    else:
+        unit = requisition.objects.create(cSpecial = cSpecial,cName=cName, cNumber=cNumber,cProjectname = cProjectname, cCusetername = cCusetername, \
+                cProjectcode = cProjectcode, cLocation = cLocation,\
+                cContent = cContent, cLastproject = cLastproject,cType=cType, cCotpye=cCotpye,\
+                    cStage=cStage, cNoted=cNoted, cdatestart = cdatestart, cdateend=cdateend,cFunction=cFunction)
         unit.save()
         message = "已儲存..."
         page= "../replyshow/" + str(cNumber) + "/show"
         return redirect(page)
-    else:
-        error = "(檔案大小超過5mB，請壓縮!)"
-        return render(request, "reply.html", locals())
 
 
 def save_file(file):
@@ -202,6 +218,7 @@ def edit(request, id=None, mode=None):
     return render(request, "edit.html", locals())
 
 def replyshow(request, id=None, mode=None):
+    name=request.user.username
     if mode == "show":
         unit = requisition.objects.get(cNumber=id)
         # unit.cName = request.GET['cName']
@@ -219,10 +236,63 @@ def replyshow(request, id=None, mode=None):
         # unit.cSchedule = request.GET['cSchedule']
         # unit.cSpecial = request.GET['cSpecial']
         # message= "已修改.."
-    return render(request, "replyshow.html", locals())
+        return render(request, "replyshow.html", locals())
 
-
-
+def replyUpdate(request, id=None, mode=None):
+    name=request.user.username
+    if mode =="load":
+        unit = requisition.objects.get(cNumber=id)
+        return render(request, "replyupdate.html", locals())
+    elif mode =="save":
+        name=request.user.username
+        unit = requisition.objects.get(cNumber=id)
+        unit.cName = request.POST['cName']
+        unit.cNumber = request.POST['cNumber']
+        unit.cProjectname = request.POST['cProjectname']
+        unit.cCusetername = request.POST['cCusetername']
+        unit.cProjectcode = request.POST['cProjectcode']
+        unit.cLocation = request.POST['cLocation']
+        unit.cContent = request.POST['cContent']
+        unit.cLastproject = request.POST['cLastproject']
+        unit.cType = request.POST['cType']
+        unit.cCotpye = request.POST['cCotpye']
+        unit.cStage = request.POST['cStage']
+        unit.cNoted = request.POST['cNoted']
+        unit.cSpecial = request.POST['cSpecial']
+        unit.cdatestart = request.POST['cdatestart']
+        unit.cdateend = request.POST['cdateend']
+        unit.cFunction = request.POST['cFunction']
+        #uploadedFile = request.POST['myfile_n']
+        #如果有上傳檔案就拿資料，拿完資料後比較檔案大小
+        if request.POST.get('myfile_n',"no key") == "no key":
+            print("我到這裡了..............")
+            unit.title = request.FILES.get('myfile_n')
+            unit.uploadedFile = request.FILES['myfile_n']
+            if unit.uploadedFile.size < 5242880:
+                unit.save()
+                message = "已儲存..."
+                page= "../../replyshow/" + str(unit.cNumber) + "/show"
+                return redirect(page)
+            else:
+                unit = requisition.objects.get(cNumber=id)
+                error = "檔案大小超過5mB，請壓縮!或是不選擇(原檔案上傳)" #這裡要改7/25
+                return render(request, "replyupdate.html", locals())
+        else:
+            unit.save()
+            print("我看看.....................")
+            print(unit.cNumber)
+            message = "已儲存..."
+            page= "../../replyshow/" + str(unit.cNumber) + "/show"
+            return redirect(page)
+def will(request):
+    message = "系統尚未開放"
+    return render(request, "index.html",locals())
+def inquire(request):
+    message = "系統尚未開放"
+    return render(request, "index.html",locals())
+def sign(request):
+    message = "系統尚未開放"
+    return render(request, "index.html",locals())
 def edit2(request, id=None, mode=None):
     if mode =="load":
         unit = student.objects.get(id=id)
@@ -288,30 +358,26 @@ def login(request):
             message = '登入失敗！'
     return render(request, "login.html", locals())
 
-def logout(request):
-    del request.session['login']
-    if request.method == 'POST':
-        name = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=name, password=password)
-        if user is not None:
-            if user.is_active:
-                auth.login(request,user)
-                message = '登入成功！'
-                return redirect('/index/')
 
-            else:
-                message = '帳號尚未啟用！'
-        else:
-            message = '登入失敗！'
-    return render(request, "login.html", locals())
 	
 def logout(request):
 	if 'username' in request.session:
-		message=request.session['username'] + ' 您已登出!'
-		del request.session['username']	#刪除Session	
+		message=request.session['login'] + ' 您已登出!'
+		del request.session['login']	#刪除Session	
 	return render(request, 'login.html',locals())
 def index(request):
     if request.user.is_authenticated:
         name=request.user.username
-    return render(request, "index.html", locals())
+        return render(request, "index.html", locals())
+    else:
+        return HttpResponse("請登入")
+
+def clereply(request):
+    name=request.user.username
+    clereply_dbs = clereply_db.objects.all().order_by('product')
+    print(clereply_dbs)
+    return render(request, 'clereply.html', locals())
+
+def clesign(request):
+    name=request.user.username
+    return render(request, 'clesign.html', locals())

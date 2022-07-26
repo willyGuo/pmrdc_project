@@ -34,8 +34,17 @@ class requisition(models.Model):
     cdatestart = models.DateField(null=True, blank=True)
     cdateend = models.DateField(null=True, blank=True)
     cFunction = models.CharField(max_length=20, default='')
-    title = models.CharField(max_length = 200,default='')
-    uploadedFile = models.FileField(upload_to=user_directory_path)
+    title = models.CharField(max_length = 200, default='',blank=True)
+    uploadedFile = models.FileField(upload_to=user_directory_path,default='',blank=True)
     dateTimeOfUpload = models.DateTimeField(auto_now = True)
     def __str__(self):
         return self.cName
+
+class clereply_db(models.Model):
+    product = models.CharField(max_length=50, default="")
+    checklist = models.CharField(max_length=50, default="")
+    producttype = models.CharField(max_length=50, default="")
+    productscoreline = models.CharField(max_length=50, default="")
+
+
+
