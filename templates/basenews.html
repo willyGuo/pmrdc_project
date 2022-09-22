@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>新聞系統</title>
+        {% load static %}
+            <link href="{%static "css/style.css" %}" rel = "stylesheet" type="text/css" />
+        </a>
+    </head>
+    <body>
+        <div id="warp">
+            <div id="header">
+                {% block login %}{% endblock %}
+                <div class="logo">
+                    <a href="/news/" title="返回首頁">
+                        <img src="{% static "images/pegalogo.png" %}" width="180" height="30" alt="news" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="headings">
+            <h2>新聞系統</h2>
+        </div>
+        {% block content %}{%endblock%}
+        <div id="footer">
+            &copy; Copyright 2022 Willy Guo 新聞系統
+        </div>
+    </body>
+</html>
+            

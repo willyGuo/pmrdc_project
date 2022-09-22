@@ -1,3 +1,4 @@
+from cgitb import enable
 from curses import noecho
 from email import message
 import imp
@@ -11,15 +12,16 @@ from django.contrib.auth import authenticate
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib import auth
-from myapp.models import student, requisition, clereply_db
+from myapp.models import NewsUnit, student, requisition, clereply_db
 from myapp.forms import PostForm, Requisition
 import time
 from . import models
 from django.core.files.storage import FileSystemStorage
 from django.db.models import FileField
+import math
 
 def cNumber_time():
-    a = str((time.strftime("%Y%m%d%H%M%S", time.localtime())))
+    a = "AM" + str((time.strftime("%Y%m%d%H%M%S", time.localtime())))
     return a
 
 def sayhello(request):
@@ -288,8 +290,12 @@ def will(request):
     message = "系統尚未開放"
     return render(request, "index.html",locals())
 def inquire(request):
-    message = "系統尚未開放"
-    return render(request, "index.html",locals())
+    name=request.user.username
+    try:
+        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").order_by('-id')    
+    except:
+        errormessage = " (讀取錯誤!) "
+    return render(request, "inquire.html",locals())
 def sign(request):
     message = "系統尚未開放"
     return render(request, "index.html",locals())
@@ -381,3 +387,57 @@ def clereply(request):
 def clesign(request):
     name=request.user.username
     return render(request, 'clesign.html', locals())
+
+page1 = 1
+def news(request,pageindex=None):
+    global page1  #重複開啟本網頁時需保留 page1 的值
+    pagesize = 8  #每頁顯示的資料筆數
+    newsall = models.NewsUnit.objects.all().order_by('-id')  #讀取新聞資料表,依時間遞減排序
+    datasize = len(newsall)  #新聞筆數
+    totpage = math.ceil(datasize / pagesize)  #總頁數
+    if pageindex==None:  #無參數
+        page1 = 1
+        newsunits = models.NewsUnit.objects.filter(enabled=True).order_by('-id')[:pagesize]
+    elif pageindex=='1':  #上一頁
+        start = (page1-2)*pagesize  #該頁第1筆資料
+        if start >= 0:  #有前頁資料就顯示
+            newsunits = models.NewsUnit.objects.filter(enabled=True).order_by('-id')[start:(start+pagesize)]
+            page1 -= 1
+    elif pageindex=='2':  #下一頁
+        start = page1*pagesize  #該頁第1筆資料
+        if start < datasize:  #有下頁資料就顯示
+            newsunits = models.NewsUnit.objects.filter(enabled=True).order_by('-id')[start:(start+pagesize)]
+            page1 += 1
+    elif pageindex=='3':  #由詳細頁面返回首頁
+        start = (page1-1)*pagesize  #取得原有頁面第1筆資料
+        newsunits = models.NewsUnit.objects.filter(enabled=True).order_by('-id')[start:(start+pagesize)]
+
+    currentpage = page1  #將目頁前頁面以區域變數傳回html
+    return render(request, "news.html", locals())
+
+def detail(request, detailid=None):
+	unit = models.NewsUnit.objects.get(id=detailid)  #根據參數取出資料
+	category = unit.catego
+	title = unit.title
+	pubtime = unit.pubtime
+	nickname = unit.nickname
+	message = unit.message
+	unit.press += 1  #點擊數加1
+	unit.save()  #儲存資料
+	
+	return render(request, "detail.html", locals())
+
+def replydelete(request, number):
+    name=request.user.username
+    #if request.method == "POST":
+    print(number)
+    #cnumber = request.POST[number]
+    try:
+        unit = requisition.objects.get(cNumber = number)
+        unit.delete()
+        message="已刪除"
+        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").order_by('id') 
+    except:
+        message="讀取錯誤"
+    render(request, "inquire.html",locals())
+    return redirect('/inquire/')

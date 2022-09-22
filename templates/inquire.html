@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}申請表單查詢{% endblock %}
+{% block content %}
+{% load static %}
+{{message}}{{number}}
+
+<div class = 'info'><br>
+</div>
+<div class = 'info'><br>
+</div>
+<div class ="row">
+    <div class="col-3">
+
+    </div>
+    <div class="col-6">
+        <div class="contentbox">
+            <table class="table table-bordered" width="100%">
+            <tr>
+              <th align="left">單號</th>
+              <th align="left">Fuction</th>
+              <th align="left">開發類型</th>
+              <th align="left">客戶名稱</th>
+              <th align="left">專案名稱</th>
+              <th align="left">工作內容</th>
+              <th align="left">狀態</th>
+            </tr>
+            {% for unit in worklist %}
+                <tr class="alt">
+                <td><a href="../replyshow/{{unit.cNumber}}/show">{{ unit.cNumber }}</a></td>
+                <td>{{ unit.cFunction }}</td>
+                <td>{{ unit.cType }}</td>
+                <td>{{ unit.cCusetername }}</td>
+                <td>{{ unit.cProjectname }}</td>
+                <td>{{ unit.cContent }}</td>
+                {% if unit.cStatus == "In Progress" %}
+                <td><font color="white" style="background-color:MediumSeaGreen;">{{ unit.cStatus }}</font></td>
+                {% endif %}
+                </tr>
+            {% empty %}
+                <div class="status warning">
+                    <p align="center"><img src="{% static "images/icon_warning.png" %}" alt="Warning" />目前無任何申請單 </p>
+                </div>
+            {% endfor %}
+            </table>
+    </div>
+    <div class="col-3">
+        
+    </div>
+
+</div>
+
+{% csrf_token %}
+<script type="text/javascript">
+    function change(){
+        window.alert("彈跳視窗想要顯示的文字");
+
+    }
+	} 
+</script>
+
+
+{% endblock %}

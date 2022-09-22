@@ -2,6 +2,7 @@
 {% extends 'base.html' %}
 {% block title %}PM申請工作單{% endblock %}
 {% block content %}
+{% load static %}
 <form  method="POST" name="form1" enctype="multipart/form-data">
 <div class = 'info'><br></div>
 <div class ="row"> 
@@ -137,7 +138,11 @@
                 <label for="formFile" class="form-label">檔案上傳
                     <span style="color:red">{{error}}</span>
                     {% if unit.uploadedFile.url is not null %}
-                        <a href="{{ unit.uploadedFile.url }}">{{unit.title}}</a>
+                        <a id="Filename" href="{{ unit.uploadedFile.url }}">{{unit.title}} </a>&nbsp;
+                        <a >
+                            <img onclick="change()" src="{% static "images/delete2.png" %}" alt="刪除">
+                          </a>
+                        
                     {% else %}
                             無上傳檔案
                     {% endif %}
@@ -153,7 +158,7 @@
 <div class="col-4"></div>
 
 <div class="col-2"><button type="button" onclick="correct_submit()"class="btn btn-primary btn-lg">送出</button></div>
-<div class="col-2"><button type="button" onclick="location.href='/index/'" class="btn btn-secondary btn-lg">取消</button></div>
+<div class="col-2"><button type="button" onclick="location.href='/inquire/'" class="btn btn-secondary btn-lg">取消</button></div>
 
 </form>
 
@@ -229,8 +234,13 @@
         }
 		else {  
 		}
-    }
-	} 
+        }
+}
+function change(){
+    var msg = "是否刪除上傳檔案";
+    if (confirm(msg) == true) {
+        }
+} 
 </script>
 
 {% endblock %}

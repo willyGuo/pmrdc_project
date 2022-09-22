@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import student, requisition,clereply_db
+from myapp.models import student, requisition,clereply_db, NewsUnit
 # Register your models here.
 
 class studentAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ class studentAdmin(admin.ModelAdmin):
 class requisitionAdmin(admin.ModelAdmin):
     list_display = ('id', 'cName','cNumber', 'cdatestart','cFunction','cdateend','cProjectname', 'cCusetername', 'cProjectcode',\
          'cLocation', 'cContent', 'cSchedule','cSpecial',\
-        'cLastproject', 'cType', 'cCotpye','cProjecttype', 'cStage', 'cNoted', 'title', 'uploadedFile', 'dateTimeOfUpload')
+        'cLastproject', 'cType', 'cCotpye','cProjecttype', 'cStage', 'cNoted', 'title', 'uploadedFile', 'dateTimeOfUpload', 'cStatus')
     list_filter =('cName', )
     search_fields = ('cName',)
     ordering =('id',)
@@ -20,6 +20,15 @@ class clereply_dbAdmin(admin.ModelAdmin):
     list_filter =('product', 'checklist')
     search_fields = ('product',)
     ordering =('id',)
+
+class NewsUnit_dbAdmin(admin.ModelAdmin):
+    list_display = ('catego', 'nickname', 'title', 'message', 'pubtime', 'enabled', 'press')
+    list_filter =('catego', 'nickname')
+    search_fields = ('catego',)
+    ordering =('id',)
+
+
 admin.site.register(student,studentAdmin)
 admin.site.register(requisition,requisitionAdmin)
 admin.site.register(clereply_db,clereply_dbAdmin)
+admin.site.register(NewsUnit,NewsUnit_dbAdmin)

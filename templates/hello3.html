@@ -7,5 +7,6 @@
 <body>
     <h1> 歡迎光臨 : {{username}} </h1>
     <h2> 現在時刻 : {{now}} </h2>
+    <input id="startDate" class="Wdate" type="text" onFocus="var endDate=$dp.$('endDate');WdatePicker({onpicked:function(){endDate.focus();},maxDate:'#F{$dp.$D(\'endDate\')}'})"/>
 </body>
 </html>

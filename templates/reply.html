@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% block title %}PM申請工作單{% endblock %}
 {% block content %}
@@ -69,7 +68,7 @@
                 <div>
                     <label for="bday">工作需求區間</label>
                     <label for="exampleFormControlInput1" id="bday_lbl"></label></br>
-                    <input type="date" id="cdatestart" name="cdatestart" value={{cdatestart}}> ~ <input type="date" id="cdateend" name="cdateend" value={{cdateend}}>
+                    <input type="date" id="cdatestart" name="cdatestart" value={{cdatestart}}> &nbsp;至&nbsp; <input type="date" id="cdateend" name="cdateend" min={{cdatestart}} value={{cdateend}}>
                   </div>
             </div>
 
@@ -122,17 +121,17 @@
           <div class="form-group">
 
                 <label for="exampleFormControlInput1">特殊需求</label>
-                <input type="text" class="form-control" id="cSpecial" name="cSpecial" placeholder="語言能力、相關經驗...">
+                <input type="text" class="form-control" id="cSpecial" name="cSpecial" placeholder="語言能力、相關經驗..." value={{cSpecial}}>
             <div class="form-group">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlInput1">過去共用專案</label>
-                <input type="text" class="form-control" id="cLastproject" name="cLastproject" placeholder="">
+                <input type="text" class="form-control" id="cLastproject" name="cLastproject" placeholder="" value={{cLastproject}}>
             </div> 
         </div>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">備註</label>
-            <textarea class="form-control" id="cNoted" name="cNoted" rows="3"></textarea>
+            <textarea class="form-control" id="cNoted" name="cNoted" rows="3" >{{cNoted}}</textarea>
           </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">檔案上傳<span style="color:red">{{error}}</span></label>
