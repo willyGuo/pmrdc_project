@@ -23,7 +23,7 @@ from django.db.models import FileField
 import math
 
 def cNumber_time():
-    a = "AM" + str((time.strftime("%Y%m%d%H%M%S", time.localtime())))
+    a = str((time.strftime("%Y%m%d%H%M%S", time.localtime())))
     return a
 
 def sayhello(request):
@@ -253,8 +253,8 @@ def replyshow(request, id=None, mode=None, select=None):
                 print("我有到這裡")
                 break
         if votealready == "Yes":
-            unitvote = Vote.objects.filter(cName= cName)[0]
-        print("我錯了")
+            unitvote = Vote.objects.filter(cName= cName)
+            print(unitvote)
         return render(request, "replyshowwill.html", locals())
     if mode == "confirm":
         cName = name
@@ -281,9 +281,10 @@ def replyshow(request, id=None, mode=None, select=None):
             unit = requisition.objects.get(cNumber=id)
             print("我在這")
             print(cVotenumber)
-            unitvote = Vote.objects.filter(cName= cName)
+            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = id)
             return render(request, "replyshowwill.html", locals())
     if mode =="changewill":
+        print(id)
         unit = requisition.objects.get(cNumber=id)
         unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = id)
         unitvote.delete()
@@ -347,14 +348,14 @@ def will(request):
         voteno = "這個人還沒接過案"
         print("xxxxxxxx")
     return render(request, "will.html",locals())
-def willselect(request):
+def willselect(request, id= None, mode=None):
     name=request.user.username
     if request.method == "POST":
         cName = name
         cVotenumber = request.POST['cNumber']
         unit = Vote.objects.create( cName= cName, cVotenumber = cVotenumber)
         unit.save()
-    return render(request, replyshow.html, locals())
+    return render(request, "replyshow.html", locals())
 def inquire(request):
     name=request.user.username
     try:
