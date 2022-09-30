@@ -39,7 +39,7 @@ class requisition(models.Model):
     dateTimeOfUpload = models.DateTimeField(auto_now = True)
     cStatus = models.CharField(max_length=20, default="In Progress")
     def __str__(self):
-        return self.cName
+        return str(self.cNumber)
 
 class clereply_db(models.Model):
     product = models.CharField(max_length=50, default="")
@@ -62,8 +62,9 @@ class NewsUnit(models.Model):  #新聞資料表
 
 class Vote(models.Model):  #新聞資料表
     cName =  models.CharField(max_length=10, null=False)  #誰投票
-    cVotenumber =  models.CharField(max_length=30, null=False)  #誰投票
+    #cVotenumber =  models.CharField(max_length=30, null=False)  #誰投票
     cVoteselect = models.BooleanField(default=False)
     cVotetime =  models.DateTimeField(auto_now = True) #投票時間
+    cVotenumber = models.ForeignKey(requisition, on_delete=models.CASCADE)
     def __str__(self):
-        return self.cVotenumber + " " +  self.cName
+        return self.cName

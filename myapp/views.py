@@ -248,20 +248,23 @@ def replyshow(request, id=None, mode=None, select=None):
         cName = name
         cVotenumber = id
         for i in unitvotefirst:
-            if unit.cName == i.cName and unit.cNumber == i.cVotenumber:
+            if unit.cName == i.cName and str(unit.cNumber) == str(i.cVotenumber):
                 votealready = "Yes"
                 print("我有到這裡")
                 break
         if votealready == "Yes":
-            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = id)[0]
+            unitvote = Vote.objects.filter(cName= cName)[0]
+        print("我錯了")
         return render(request, "replyshowwill.html", locals())
     if mode == "confirm":
         cName = name
         cVotenumber = id
         unitvote = Vote.objects.all().order_by('id')
+        unit = requisition.objects.get(cNumber=id)
         votealready = False
+        
         for i in unitvote:
-            if cName == i.cName and cVotenumber == i.cVotenumber:
+            if cName == i.cName and str(id) == str(i.cVotenumber):
                 votealready = True
                 break
         if votealready == False:
@@ -269,14 +272,16 @@ def replyshow(request, id=None, mode=None, select=None):
                 cVoteselect = True
             elif select == "no":
                 cVoteselect = False
-            unitvote = Vote.objects.create( cName= cName, cVotenumber = cVotenumber, cVoteselect = cVoteselect)
+            unitvote = Vote.objects.create( cName= cName, cVotenumber = unit, cVoteselect = cVoteselect)
             unitvote.save()
             unit = requisition.objects.get(cNumber=id)
             check = "voteconfirm"
             return render(request, "replyshowwill.html", locals())
         else:
             unit = requisition.objects.get(cNumber=id)
-            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = cVotenumber)
+            print("我在這")
+            print(cVotenumber)
+            unitvote = Vote.objects.filter(cName= cName)
             return render(request, "replyshowwill.html", locals())
     if mode =="changewill":
         unit = requisition.objects.get(cNumber=id)
