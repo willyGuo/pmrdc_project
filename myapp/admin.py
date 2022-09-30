@@ -1,5 +1,6 @@
 from django.contrib import admin
-from myapp.models import student, requisition,clereply_db, NewsUnit
+from myapp.models import student, requisition,clereply_db, NewsUnit, Vote
+from myapp.views import vote
 # Register your models here.
 
 class studentAdmin(admin.ModelAdmin):
@@ -27,8 +28,15 @@ class NewsUnit_dbAdmin(admin.ModelAdmin):
     search_fields = ('catego',)
     ordering =('id',)
 
+class cVote_dbAdmin(admin.ModelAdmin):
+    list_display = ('id',"cName", "cVotenumber", "cVotetime", "cVoteselect")
+    list_filter = ("cName",)
+    search_fields = ("cName",)
+    ordering = ("cName",)
+
 
 admin.site.register(student,studentAdmin)
 admin.site.register(requisition,requisitionAdmin)
 admin.site.register(clereply_db,clereply_dbAdmin)
 admin.site.register(NewsUnit,NewsUnit_dbAdmin)
+admin.site.register(Vote, cVote_dbAdmin)

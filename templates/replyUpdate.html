@@ -139,16 +139,17 @@
                     <span style="color:red">{{error}}</span>
                     {% if unit.uploadedFile.url is not null %}
                         <a id="Filename" href="{{ unit.uploadedFile.url }}">{{unit.title}} </a>&nbsp;
-                        <a >
+                        <a id="Changephoto">
                             <img onclick="change()" src="{% static "images/delete2.png" %}" alt="刪除">
                           </a>
+                          <a id="Nofile"></a>
                         
                     {% else %}
-                            無上傳檔案
+                        <a id="log">無上傳檔案</a>
                     {% endif %}
                 </label>
                 <label for="exampleFormControlInput1" id="myfile_lb"></label></br>
-                <input class="form-control" type="file" name = "myfile_n" id="myfil_i">
+                <input class="form-control" type="file" name = "myfile_n" id="myfile_i">
             </div>    
           <div class="col-3"></div>
         <div class="col-2"></div>
@@ -181,7 +182,7 @@
         var v5=document.getElementById("cContent").value;
         var v6=document.getElementById("cdatestart").value;
         var v7=document.getElementById("cdateend").value;
-        var v8=document.getElementById("myfil_i").value;
+        var v8=document.getElementById("myfile_i").value;
         if (v1 == ""){
             var label = document.getElementById("cCusetername_lbl");
             label.innerText="(必填)";
@@ -239,6 +240,15 @@
 function change(){
     var msg = "是否刪除上傳檔案";
     if (confirm(msg) == true) {
+        {% comment %} 把上傳資訊改成空白 {% endcomment %}
+        Nofile.textContent = "無上傳檔案"
+        $("#Filename").remove();
+        $("#Changephoto").remove();
+        $('#myfile_i').prop("value", )
+
+        
+        
+        
         }
 } 
 </script>

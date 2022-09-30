@@ -44,6 +44,8 @@ urlpatterns = [
     path('inquire/',views.inquire),
     path('edit/<int:id>/', views.edit),
     path('replyshow/<str:id>/<str:mode>',views.replyshow),
+    path('replyshow/<str:id>/<str:mode>/<str:select>',views.replyshow),
+    path('replyshow/<str:id>/<str:mode>',views.willselect),
     path('replyupdate/<str:id>/<str:mode>',views.replyUpdate),
     path('edit/<int:id>/<str:mode>', views.edit),
     path('edit2/<int:id>/<str:mode>', views.edit2),
@@ -60,6 +62,7 @@ urlpatterns = [
     path('news/', views.news),
     path('detail/<int:detailid>/', views.detail),
     path('replydelete/<str:number>/', views.replydelete),
+
 
 
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

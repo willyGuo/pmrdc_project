@@ -1,9 +1,11 @@
+from ast import Try
 from cgitb import enable
 from curses import noecho
 from email import message
 import imp
 from itertools import product
 import re
+from tkinter import N
 from turtle import pos
 from urllib import response
 from django.shortcuts import render, redirect
@@ -12,7 +14,7 @@ from django.contrib.auth import authenticate
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib import auth
-from myapp.models import NewsUnit, student, requisition, clereply_db
+from myapp.models import NewsUnit, student, requisition, clereply_db,Vote
 from myapp.forms import PostForm, Requisition
 import time
 from . import models
@@ -219,7 +221,7 @@ def edit(request, id=None, mode=None):
             message = "此id不存在"
     return render(request, "edit.html", locals())
 
-def replyshow(request, id=None, mode=None):
+def replyshow(request, id=None, mode=None, select=None):
     name=request.user.username
     if mode == "show":
         unit = requisition.objects.get(cNumber=id)
@@ -239,7 +241,49 @@ def replyshow(request, id=None, mode=None):
         # unit.cSpecial = request.GET['cSpecial']
         # message= "已修改.."
         return render(request, "replyshow.html", locals())
-
+    if mode == "will":
+        unit = requisition.objects.get(cNumber=id)
+        unitvotefirst = Vote.objects.all().order_by('id')
+        votealready = "No"
+        cName = name
+        cVotenumber = id
+        for i in unitvotefirst:
+            if unit.cName == i.cName and unit.cNumber == i.cVotenumber:
+                votealready = "Yes"
+                print("我有到這裡")
+                break
+        if votealready == "Yes":
+            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = id)[0]
+        return render(request, "replyshowwill.html", locals())
+    if mode == "confirm":
+        cName = name
+        cVotenumber = id
+        unitvote = Vote.objects.all().order_by('id')
+        votealready = False
+        for i in unitvote:
+            if cName == i.cName and cVotenumber == i.cVotenumber:
+                votealready = True
+                break
+        if votealready == False:
+            if select == "yes":
+                cVoteselect = True
+            elif select == "no":
+                cVoteselect = False
+            unitvote = Vote.objects.create( cName= cName, cVotenumber = cVotenumber, cVoteselect = cVoteselect)
+            unitvote.save()
+            unit = requisition.objects.get(cNumber=id)
+            check = "voteconfirm"
+            return render(request, "replyshowwill.html", locals())
+        else:
+            unit = requisition.objects.get(cNumber=id)
+            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = cVotenumber)
+            return render(request, "replyshowwill.html", locals())
+    if mode =="changewill":
+        unit = requisition.objects.get(cNumber=id)
+        unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = id)
+        unitvote.delete()
+        votealready = "No"
+        return render(request, "replyshowwill.html", locals())
 def replyUpdate(request, id=None, mode=None):
     name=request.user.username
     if mode =="load":
@@ -280,15 +324,32 @@ def replyUpdate(request, id=None, mode=None):
                 error = "檔案大小超過5mB，請壓縮!或是不選擇(原檔案上傳)" #這裡要改7/25
                 return render(request, "replyupdate.html", locals())
         else:
+            unit.myfile_n = ""
+            unit.uploadedFile = ""
             unit.save()
-            print("我看看.....................")
-            print(unit.cNumber)
-            message = "已儲存..."
             page= "../../replyshow/" + str(unit.cNumber) + "/show"
             return redirect(page)
 def will(request):
-    message = "系統尚未開放"
-    return render(request, "index.html",locals())
+    name=request.user.username
+    try:
+        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')  
+    except:
+        errormessage = " (讀取錯誤!) "
+    try:
+        unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = worklist.cNumber)
+        print("ddddd")
+    except:
+        voteno = "這個人還沒接過案"
+        print("xxxxxxxx")
+    return render(request, "will.html",locals())
+def willselect(request):
+    name=request.user.username
+    if request.method == "POST":
+        cName = name
+        cVotenumber = request.POST['cNumber']
+        unit = Vote.objects.create( cName= cName, cVotenumber = cVotenumber)
+        unit.save()
+    return render(request, replyshow.html, locals())
 def inquire(request):
     name=request.user.username
     try:
