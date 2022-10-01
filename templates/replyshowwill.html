@@ -138,9 +138,9 @@
     {% if unit.cStatus == "In Progress" %}
         <button class="btn btn-primary" type="button" onclick="location.href='/replyshow/{{unit.cNumber}}/changewill'">修改意願</button>
         <a>已投過票， 
-            {% if unitvote.cVoteselect == True %}
+            {% if voteconfirm == True %}
             <font color="white" style="background-color:MediumSeaGreen;">有意願</font>
-            {% elif unitvote.cVoteselect == False %}
+            {% elif voteconfirm == False %}
             <font color="white" style="background-color:gray;">無意願</font>
             {% else%}
             我跑到這裡了

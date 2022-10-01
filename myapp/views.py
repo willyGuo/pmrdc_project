@@ -19,8 +19,9 @@ from myapp.forms import PostForm, Requisition
 import time
 from . import models
 from django.core.files.storage import FileSystemStorage
-from django.db.models import FileField
+from django.db.models import FileField, Prefetch
 import math
+
 
 def cNumber_time():
     a = str((time.strftime("%Y%m%d%H%M%S", time.localtime())))
@@ -243,7 +244,7 @@ def replyshow(request, id=None, mode=None, select=None):
         return render(request, "replyshow.html", locals())
     if mode == "will":
         unit = requisition.objects.get(cNumber=id)
-        unitvotefirst = Vote.objects.all().order_by('id')
+        unitvotefirst = Vote.objects.all().order_by('id').select_related('cVotenumber')
         votealready = "No"
         cName = name
         cVotenumber = id
@@ -251,42 +252,31 @@ def replyshow(request, id=None, mode=None, select=None):
             if unit.cName == i.cName and str(unit.cNumber) == str(i.cVotenumber):
                 votealready = "Yes"
                 print("我有到這裡")
+                print(i.cVotenumber)
+                voteconfirm = i.cVoteselect
                 break
-        if votealready == "Yes":
-            unitvote = Vote.objects.filter(cName= cName)
-            print(unitvote)
         return render(request, "replyshowwill.html", locals())
     if mode == "confirm":
         cName = name
         cVotenumber = id
-        unitvote = Vote.objects.all().order_by('id')
         unit = requisition.objects.get(cNumber=id)
         votealready = False
-        
-        for i in unitvote:
-            if cName == i.cName and str(id) == str(i.cVotenumber):
-                votealready = True
-                break
-        if votealready == False:
-            if select == "yes":
-                cVoteselect = True
-            elif select == "no":
-                cVoteselect = False
+        if select == "yes":
+            cVoteselect = True
             unitvote = Vote.objects.create( cName= cName, cVotenumber = unit, cVoteselect = cVoteselect)
             unitvote.save()
-            unit = requisition.objects.get(cNumber=id)
-            check = "voteconfirm"
+            voteconfirm = True
             return render(request, "replyshowwill.html", locals())
-        else:
-            unit = requisition.objects.get(cNumber=id)
-            print("我在這")
-            print(cVotenumber)
-            unitvote = Vote.objects.filter(cName= cName).filter(cVotenumber = id)
+        elif select == "no":
+            cVoteselect = False
+            unitvote = Vote.objects.create( cName= cName, cVotenumber = unit, cVoteselect = cVoteselect)
+            unitvote.save()
+            voteconfirm = False
             return render(request, "replyshowwill.html", locals())
     if mode =="changewill":
         print(id)
         unit = requisition.objects.get(cNumber=id)
-        unitvote = Vote.objects.filter(cName = name).filter(cVotenumber = id)
+        unitvote = Vote.objects.filter(cName = name).select_related('cVotenumber')
         unitvote.delete()
         votealready = "No"
         return render(request, "replyshowwill.html", locals())
@@ -338,7 +328,10 @@ def replyUpdate(request, id=None, mode=None):
 def will(request):
     name=request.user.username
     try:
-        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')  
+        qs=Vote.objects.filter(cName = name)
+        print(worklist)
+        #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
+
     except:
         errormessage = " (讀取錯誤!) "
     try:
