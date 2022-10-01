@@ -328,9 +328,7 @@ def replyUpdate(request, id=None, mode=None):
 def will(request):
     name=request.user.username
     try:
-        qs=Vote.objects.filter(cName = name)
-        print(worklist)
-        #worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
+        worklist = requisition.objects.filter(cName='willy_guo').exclude(cNumber ="").filter(cStatus="In Progress").order_by('-id')
 
     except:
         errormessage = " (讀取錯誤!) "
